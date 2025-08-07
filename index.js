@@ -12,6 +12,10 @@ app.use(bodyParser.json());
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
+app.get('/api/chat', (req, res) => {
+  res.json({ message: 'Welcome to the OpenRouter Chat API!' });
+});
+
 app.post('/api/chat', async (req, res) => {
   const userPrompt = req.body.prompt;
 
