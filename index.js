@@ -4,15 +4,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 
-const apiKey= "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";
-
 const app = express();
 const PORT = 5000;
 
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(bodyParser.json());
 
-const OPENROUTER_API_KEY = apiKey;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 app.get('/api/chat', (req, res) => {
   res.json({ message: 'Welcome to the OpenRouter Chat API!' });
@@ -54,4 +52,3 @@ app.post('/api/chat', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
-
