@@ -1,38 +1,30 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const app = express();
 const PORT = 5000;
 
-// ✅ Allow both production & local frontend
 const allowedOrigins = [
-  'https://speech-rho.vercel.app', // production frontend
-  'http://localhost:3000'          // local frontend
+  'https://speech-rho.vercel.app',
+  'http://localhost:3000'
 ];
 
-// ✅ CORS middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like curl or mobile apps)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error('CORS policy: Origin not allowed'));
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// ✅ Preflight + CORS handler for all requests
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-// ✅ Handle preflight requests (fixed `pathToRegexpError`)
-app.options('/*', cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.use(bodyParser.json());
 
@@ -48,7 +40,6 @@ app.post('/api/chat', async (req, res) => {
   if (!prompt || !prompt.trim()) {
     return res.status(400).json({ error: 'Prompt is required.' });
   }
-
   if (!apiKey || !apiKey.trim()) {
     return res.status(400).json({ error: 'API key is required.' });
   }
@@ -71,7 +62,6 @@ app.post('/api/chat', async (req, res) => {
         headers: {
           Authorization: `Bearer ${apiKey.trim() || OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
-          // Can update this dynamically if needed
           'HTTP-Referer': 'https://speech-rho.vercel.app',
           'X-Title': 'SpeechToTextApp',
         },
