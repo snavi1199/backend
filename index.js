@@ -7,7 +7,7 @@ const axios = require('axios');
 const app = express();
 const PORT = 5000;
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://speech-rho.vercel.app/' }));
 app.use(bodyParser.json());
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -63,3 +63,4 @@ app.post('/api/chat', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
+
