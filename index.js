@@ -1,4 +1,4 @@
-require('dotenv').config(); // load environment variables
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -17,27 +17,38 @@ app.get('/api/chat', (req, res) => {
 });
 
 app.post('/api/chat', async (req, res) => {
-  const userPrompt = req.body.prompt;
+  const { prompt, role, apiKey } = req.body;
 
-  if (!userPrompt || !userPrompt.trim()) {
+  if (!prompt || !prompt.trim()) {
     return res.status(400).json({ error: 'Prompt is required.' });
   }
+
+  if (!apiKey || !apiKey.trim()) {
+    return res.status(400).json({ error: 'API key is required.' });
+  }
+
+  const roleContext = role?.trim()
+    ? `You are a helpful AI assistant acting as a ${role.trim()}.`
+    : 'You are a helpful AI assistant.';
 
   try {
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
         model: 'openai/gpt-3.5-turbo',
-        messages: [{ role: 'user', content: userPrompt }],
+        messages: [
+          { role: 'system', content: roleContext },
+          { role: 'user', content: prompt },
+        ],
       },
       {
         headers: {
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${apiKey.trim() || OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
           'HTTP-Referer': 'http://localhost:3000',
           'X-Title': 'SpeechToTextApp',
         },
-        timeout: 10000, // Add timeout to avoid hanging
+        timeout: 10000,
       }
     );
 
