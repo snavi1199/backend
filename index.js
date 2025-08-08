@@ -13,22 +13,22 @@ const allowedOrigins = [
   'http://localhost:3000'          // local frontend
 ];
 
+// ✅ CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl)
+    // Allow requests with no origin (like curl or mobile apps)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
-    } else {
-      return callback(new Error('CORS policy: Origin not allowed'));
     }
+    return callback(new Error('CORS policy: Origin not allowed'));
   },
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// ✅ Handle preflight requests
-app.options('*', cors({
+// ✅ Handle preflight requests (fixed `pathToRegexpError`)
+app.options('/*', cors({
   origin: allowedOrigins,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -71,7 +71,8 @@ app.post('/api/chat', async (req, res) => {
         headers: {
           Authorization: `Bearer ${apiKey.trim() || OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
-          'HTTP-Referer': 'http://localhost:3000',
+          // Can update this dynamically if needed
+          'HTTP-Referer': 'https://speech-rho.vercel.app',
           'X-Title': 'SpeechToTextApp',
         },
         timeout: 10000,
