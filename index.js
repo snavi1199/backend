@@ -41,6 +41,11 @@ Achievements[Project – Aladdin Studio]
  Designed secure API integrations using Axios/Fetch for real-time data synchronization.
  Collaborated directly with product owners and QA to deliver user stories with the highest quality.
  Built full - stack solutions with Java Spring Boot + GO Lang backend and React front - end.
+Designed secure API integrations using Axios/Fetch for real-time data synchronization and consistent data delivery.
+Architected a hybrid backend infrastructure where:
+The main application server (written in Go) manages all connections through Cassandra DB, exposing REST API endpoints with a centralized router to handle system-wide routing and data flow.
+The Java Spring Boot service manages specialized modules backed by a Sybase database, communicating with the Go main server via bRPC connections, ensuring high-speed, reliable inter-service communication.
+Collaborated directly with product owners, design, and QA teams to deliver features with the highest quality and alignment to business goals.
 System Engineer
 Tata Consultancy Service - BlackRock(Feb 2023 – June 2023) Chennai, India
 Achievements[Project – Studio - Compute – Micro Frontend Application]
@@ -159,3 +164,4 @@ app.post('/api/chat', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
 });
+
