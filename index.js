@@ -43,6 +43,13 @@ Achievements[Project – Aladdin Studio]
  Built full - stack solutions with Java Spring Boot + GO Lang backend and React front - end.
 Designed secure API integrations using Axios/Fetch for real-time data synchronization and consistent data delivery.
 Architected a hybrid backend infrastructure where:
+UI - spaces and projects
+spaces means where user can collaborate to build in projects and track usage throughout their organization. spaces are initially created by your orgainzation's adminsitrator but self-administered by their defined admins for flexibility in managing user access to projects and resources. there is two types
+of spaces, personal and shared space. personal space every user with access to studio has personal space and it doesn't meant collaboration it's individual one but shared space is for organization.
+Projects - where users collaborate to build. projects allow you to dynamically manage access to your resources and share work within your team. two types of projects - discoverable and private.
+private means same only minimal access and can have more sensitive informarion.
+Jobs - is a program that is written by a user to execute an action. example of such action include building structured data tables from unstructured data or performing aggregrations on a dataset.
+how do we execute a job - two way - interactively, through cli (CID data pipeline), - data feed in the hadoop client intelligence platform by executing the hadoop commands or non-interactively through a job scheduler(data science job scheduler), extracting data from hive and writing out a csv, performing data manipulation and analyitcs. output clean data tables or visulaization as images and crontab scheduler format using to schedule the job.
 The main application server (written in Go) manages all connections through Cassandra DB, exposing REST API endpoints with a centralized router to handle system-wide routing and data flow.
 The Java Spring Boot service manages specialized modules backed by a Sybase database, communicating with the Go main server via bRPC connections, ensuring high-speed, reliable inter-service communication.
 Collaborated directly with product owners, design, and QA teams to deliver features with the highest quality and alignment to business goals.
@@ -164,4 +171,5 @@ app.post('/api/chat', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
 });
+
 
